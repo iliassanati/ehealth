@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import FormContainer from '../components/FormContainer';
-import { register } from '../actions/userActions';
+import Message from '../../components/Message';
+import Loader from '../../components/Loader';
+import FormContainer from '../../components/FormContainer';
+import { register } from '../../actions/userActions';
 
-const RegisterScreen = ({ location, history }) => {
+const PatientRegisterScreen = ({ location, history }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -91,7 +91,13 @@ const RegisterScreen = ({ location, history }) => {
       <Row className='py-3'>
         <Col>
           <p>Vous avez un compte ?</p>
-          <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
+          <Link
+            to={
+              redirect
+                ? `/patient/login?redirect=${redirect}`
+                : '/patient/login'
+            }
+          >
             <p>Connecter vous</p>
           </Link>
         </Col>
@@ -100,4 +106,4 @@ const RegisterScreen = ({ location, history }) => {
   );
 };
 
-export default RegisterScreen;
+export default PatientRegisterScreen;

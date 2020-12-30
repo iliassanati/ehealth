@@ -15,7 +15,16 @@ spec:
       containers:
         - name: doctor
           image: iliassanati/doctor
-
+          env:
+            - name: GEOCODER_PROVIDER
+              value: mapquest
+            - name: GEOCODER_API_KEY
+              value: 'XvhAoG5JhR5wJ3TGEOkuDjoufdK2bo51'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
 ---
 apiVersion: v1
 kind: Service

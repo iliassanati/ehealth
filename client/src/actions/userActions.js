@@ -57,7 +57,7 @@ export const logout = () => dispatch => {
   // localStorage.removeItem('shippingAddress');
   // localStorage.removeItem('paymentMethod');
   dispatch({ type: USER_LOGOUT });
-  // dispatch({ type: USER_DETAILS_RESET });
+  dispatch({ type: USER_DETAILS_RESET });
   // dispatch({ type: ORDER_LIST_MY_RESET });
   // dispatch({ type: USER_LIST_RESET });
   document.location.href = '/login';
@@ -68,8 +68,6 @@ export const register = (name, email, password) => async dispatch => {
     dispatch({
       type: USER_REGISTER_REQUEST,
     });
-
-    console.log(name, email, password);
 
     const config = {
       headers: {
@@ -82,8 +80,6 @@ export const register = (name, email, password) => async dispatch => {
       { name, email, password },
       config
     );
-
-    console.log(data);
 
     dispatch({
       type: USER_REGISTER_SUCCESS,

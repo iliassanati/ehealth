@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: doctor-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: doctor-mongo
+  template:
+    metadata:
+      labels:
+        app: doctor-mongo
+    spec:
+      containers:
+        - name: doctor-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: doctor-mongo-srv
+spec:
+  selector:
+    app: doctor-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

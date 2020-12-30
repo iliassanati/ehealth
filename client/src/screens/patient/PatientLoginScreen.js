@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import FormContainer from '../components/FormContainer';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import { login } from '../actions/userActions';
+import FormContainer from '../../components/FormContainer';
+import Message from '../../components/Message';
+import Loader from '../../components/Loader';
+import { login } from '../../actions/userActions';
 
-const LoginScreen = ({ location, history }) => {
+const PatientLoginScreen = ({ location, history }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -31,7 +31,7 @@ const LoginScreen = ({ location, history }) => {
 
   return (
     <FormContainer>
-      <h1>Mon Compte</h1>
+      <h1>Espace Patients</h1>
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>
@@ -63,7 +63,13 @@ const LoginScreen = ({ location, history }) => {
       <Row className='py-3'>
         <Col>
           <p>Pas encore de compte?</p>
-          <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>
+          <Link
+            to={
+              redirect
+                ? `/patient/register?redirect=${redirect}`
+                : '/patient/register'
+            }
+          >
             <p>
               {' '}
               Inscrivez-vous pour prendre RDV en ligne avec votre medecin en 1
@@ -76,4 +82,4 @@ const LoginScreen = ({ location, history }) => {
   );
 };
 
-export default LoginScreen;
+export default PatientLoginScreen;

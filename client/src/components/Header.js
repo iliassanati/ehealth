@@ -3,16 +3,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { logout } from '../actions/userActions';
+import { doctorLogout } from '../actions/doctorActions';
 
 const Header = () => {
   const dispatch = useDispatch();
+
   const userLogin = useSelector(state => state.userLogin);
+  const doctorLogin = useSelector(state => state.doctorLogin);
 
   const { userInfo } = userLogin;
+  const { doctorInfo } = doctorLogin;
 
-  const logoutHandler = e => {
+  const patientLogoutHandler = e => {
     e.preventDefault();
     dispatch(logout());
+  };
+
+  const doctorLogoutHandler = e => {
+    e.preventDefault();
+    dispatch(doctorLogout());
   };
 
   return (
@@ -27,26 +36,53 @@ const Header = () => {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ml-auto'>
-              <LinkContainer to='/login'>
-                <Nav.Link>
-                  <i className='fas fa-user-md'></i> Vous etes un medecin?
-                </Nav.Link>
-              </LinkContainer>
               {userInfo ? (
-                <NavDropdown title={userInfo.name} id='username'>
-                  <LinkContainer to='/profile'>
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                <>
+                  <LinkContainer to='/patient/profile'>
+                    <Nav.Link>
+                      <i className='fas fa-calendar-alt'> </i> Mes rendez-vous
+                    </Nav.Link>
                   </LinkContainer>
-                  <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
+                  <NavDropdown title={userInfo.name} id='username'>
+                    <LinkContainer to='/patient/profile'>
+                      <NavDropdown.Item>
+                        {' '}
+                        <i className='fas fa-user'></i> Profile
+                      </NavDropdown.Item>
+                    </LinkContainer>
+
+                    <NavDropdown.Item onClick={patientLogoutHandler}>
+                      <i className='fas fa-sign-out-alt'></i> Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                </>
+              ) : doctorInfo ? (
+                <>
+                  <LinkContainer to='/doctor/doctorspace'>
+                    <Nav.Link>
+                      <i className='fas fa-user-md'></i> Bonjour{' '}
+                      {doctorInfo.prenom}
+                    </Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to='/patient/profile'>
+                    <Nav.Link onClick={doctorLogoutHandler}>
+                      <i className='fas fa-sign-out-alt'></i> Deconnecter
+                    </Nav.Link>
+                  </LinkContainer>
+                </>
               ) : (
-                <LinkContainer to='/login'>
-                  <Nav.Link>
-                    <i className='fas fa-user'></i> Mon Compte
-                  </Nav.Link>
-                </LinkContainer>
+                <>
+                  <LinkContainer to='/doctor/login'>
+                    <Nav.Link>
+                      <i className='fas fa-user-md'></i> Vous etes un medecin?
+                    </Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to='/patient/login'>
+                    <Nav.Link>
+                      <i className='fas fa-user'></i> Mon Compte
+                    </Nav.Link>
+                  </LinkContainer>
+                </>
               )}
             </Nav>
           </Navbar.Collapse>
