@@ -7,12 +7,28 @@ import {
   userLoginReducer,
   userDetailsReducer,
   userUpdateProfileReducer,
+  userListReducer,
 } from './reducers/userReducers';
 
 import {
   doctorLoginReducer,
   doctorRegisterReducer,
+  doctorDetailsReducer,
+  doctorUpdateProfileReducer,
+  doctorListReducer,
+  doctorInfoByIdReducer,
+  doctorReviewCreateReducer,
 } from './reducers/doctorReducers';
+
+import {
+  doctorRdvListReducer,
+  patientRdvListReducer,
+  rdvCreateReducer,
+  rdvDeliverReducer,
+  rdvDetailsReducer,
+  rdvPayReducer,
+} from './reducers/rdvReducers';
+import { rdvInfoReducer } from './reducers/rdvInfoReducers';
 
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
@@ -21,6 +37,18 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
   doctorRegister: doctorRegisterReducer,
   doctorLogin: doctorLoginReducer,
+  doctorList: doctorListReducer,
+  doctorDetails: doctorDetailsReducer,
+  doctorInfoById: doctorInfoByIdReducer,
+  doctorUpdateProfile: doctorUpdateProfileReducer,
+  doctorReviewCreate: doctorReviewCreateReducer,
+  rdvInfo: rdvInfoReducer,
+  rdvCreate: rdvCreateReducer,
+  rdvDetails: rdvDetailsReducer,
+  rdvPay: rdvPayReducer,
+  rdvDeliver: rdvDeliverReducer,
+  patientRdvList: patientRdvListReducer,
+  doctorRdvList: doctorRdvListReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
@@ -31,7 +59,19 @@ const doctorInfoFromStorage = localStorage.getItem('doctorInfo')
   ? JSON.parse(localStorage.getItem('doctorInfo'))
   : null;
 
+const dateFromStrorage = localStorage.getItem('date')
+  ? JSON.parse(localStorage.getItem('date'))
+  : null;
+
+const renseignementsFromStorage = localStorage.getItem('renseignements')
+  ? JSON.parse(localStorage.getItem('renseignements'))
+  : {};
+
 const initialState = {
+  rdvInfo: {
+    date: dateFromStrorage,
+    renseignements: renseignementsFromStorage,
+  },
   userLogin: { userInfo: userInfoFromStorage },
   doctorLogin: { doctorInfo: doctorInfoFromStorage },
 };

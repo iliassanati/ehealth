@@ -8,7 +8,8 @@ import FormContainer from '../../components/FormContainer';
 import { register } from '../../actions/userActions';
 
 const PatientRegisterScreen = ({ location, history }) => {
-  const [name, setName] = useState('');
+  const [nom, setNom] = useState('');
+  const [prenom, setPrenom] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPaasword] = useState('');
@@ -32,7 +33,7 @@ const PatientRegisterScreen = ({ location, history }) => {
     if (password !== confirmPassword) {
       setMessage('Password do not match');
     } else {
-      dispatch(register(name, email, password));
+      dispatch(register(nom, prenom, email, password));
     }
   };
 
@@ -42,16 +43,29 @@ const PatientRegisterScreen = ({ location, history }) => {
       {message && <Message variant='danger'>{message}</Message>}
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
+
       <Form onSubmit={submitHandler}>
-        <Form.Group controlId='name'>
-          <Form.Label>Nom complet</Form.Label>
-          <Form.Control
-            type='name'
-            placeholder='Enter votre nom et prénom'
-            value={name}
-            onChange={e => setName(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+        <Form.Row>
+          <Form.Group as={Col} md='6' controlId='nom'>
+            <Form.Label>Nom </Form.Label>
+            <Form.Control
+              type='nom'
+              placeholder='Enter votre nom'
+              value={nom}
+              onChange={e => setNom(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+
+          <Form.Group as={Col} md='6' controlId='prenom'>
+            <Form.Label>Nom complet</Form.Label>
+            <Form.Control
+              type='prenom'
+              placeholder='Enter votre prénom'
+              value={prenom}
+              onChange={e => setPrenom(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+        </Form.Row>
 
         <Form.Group controlId='email'>
           <Form.Label>Adresse Email</Form.Label>

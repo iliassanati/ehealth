@@ -16,6 +16,14 @@ build:
         manual:
           - src: 'src/**/*.js'
             dest: .
+    - image: iliassanati/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
     - image: iliassanati/doctor
       context: doctor
       docker:
@@ -24,11 +32,27 @@ build:
         manual:
           - src: 'src/**/*.js'
             dest: .
-    - image: iliassanati/client
-      context: client
+    - image: iliassanati/rdv
+      context: rdv
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - src: '**/*.js'
+          - src: 'src/**/*.js'
+            dest: .
+    - image: iliassanati/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.js'
+            dest: .
+    - image: iliassanati/payment
+      context: payment
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
             dest: .

@@ -13,31 +13,36 @@ const DoctorSpaceScreen = () => {
   const doctorLogin = useSelector(state => state.doctorLogin);
   const { doctorInfo } = doctorLogin;
 
+  const doctorDetails = useSelector(state => state.doctorDetails);
+  const { loading, error, doctor } = doctorDetails;
+
   return (
     <>
       <Row>
         <Col>
-          {doctorInfo && (
+          {/* {doctorInfo && (
             <h1>
               Bonjour {doctorInfo.titre} {doctorInfo.nom}{' '}
             </h1>
-          )}
+          )} */}
           <Nav className='justify-content-center mb-4'>
             <Nav.Item>
-              <LinkContainer to='/doctor/doctorprofil'>
+              <LinkContainer to='/doctors/profile'>
                 <Nav.Link className='btn btn-light my-3'>Mon profile</Nav.Link>
               </LinkContainer>
             </Nav.Item>
 
             <Nav.Item>
-              <LinkContainer to='/shipping'>
+              <LinkContainer to='/doctors/patients'>
                 <Nav.Link className='btn btn-light my-3'>Mes patients</Nav.Link>
               </LinkContainer>
             </Nav.Item>
 
             <Nav.Item>
-              <LinkContainer to='/payment'>
-                <Nav.Link className='btn btn-light my-3'>Mon agenda</Nav.Link>
+              <LinkContainer to='/doctors/rdvs'>
+                <Nav.Link className='btn btn-light my-3'>
+                  Mes rendez-vous
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
           </Nav>

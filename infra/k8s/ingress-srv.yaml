@@ -18,6 +18,18 @@ spec:
             backend:
               serviceName: doctor-srv
               servicePort: 3000
+          - path: /api/rdvs/?(.*)
+            backend:
+              serviceName: rdv-srv
+              servicePort: 3000
+          - path: /api/orders/?(.*)
+            backend:
+              serviceName: order-srv
+              servicePort: 3000
+          - path: /api/payments/?(.*)
+            backend:
+              serviceName: payment-srv
+              servicePort: 3000
           - path: /?(.*)
             backend:
               serviceName: client-srv

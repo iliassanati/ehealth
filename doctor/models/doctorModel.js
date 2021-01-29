@@ -1,6 +1,29 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import geocoder from '../utils/geocoder.js';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+
+const reviewSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    rating: {
+      type: Number,
+      required: true,
+    },
+    comment: {
+      type: String,
+      required: true,
+    },
+    user: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
 const doctorSchema = mongoose.Schema({
   titre: {
@@ -24,6 +47,17 @@ const doctorSchema = mongoose.Schema({
   password: {
     type: String,
     required: true,
+  },
+  reviews: [reviewSchema],
+  rating: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  numReviews: {
+    type: Number,
+    required: true,
+    default: 0,
   },
   specialite: {
     type: String,
@@ -119,7 +153,9 @@ const doctorSchema = mongoose.Schema({
       type: [Number],
       index: '2dsphere',
     },
-    formattedAddress: String,
+    formattedAddress: {
+      type: String,
+    },
   },
   ville: {
     type: String,
@@ -135,12 +171,46 @@ const doctorSchema = mongoose.Schema({
   },
   image: {
     type: String,
-    required: true,
+    default: '/images/doctor.jpg',
   },
+  prixConsultation: {
+    type: Number,
+    default: 300,
+  },
+  description: {
+    type: String,
+  },
+  diplomesEtFormations: {
+    type: String,
+  },
+  informationsPratiques: {
+    type: String,
+  },
+
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: Date().now,
   },
+});
+
+doctorSchema.set('versionkey', 'version');
+doctorSchema.plugin(updateIfCurrentPlugin);
+
+// Geocode & create location
+
+doctorSchema.pre('save', async function (next) {
+  const add = this.addressCabinet + ' ' + this.ville;
+
+  const loc = await geocoder.geocode(add);
+  this.location = {
+    type: 'Point',
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+  };
+
+  // Do not save address
+  // this.addressCabinet = undefined;
+  next();
 });
 
 doctorSchema.methods.matchPassword = async function (enteredPassword) {
@@ -154,20 +224,6 @@ doctorSchema.pre('save', async function (next) {
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-});
-
-// Geocode & create location
-doctorSchema.pre('save', async function (next) {
-  const loc = await geocoder.geocode(this.addressCabinet);
-  this.location = {
-    type: 'Point',
-    coordinates: [loc[0].longitude, loc[0].latitude],
-    formattedAddress: loc[0].formattedAddress,
-  };
-
-  // Do not save address
-  this.addressCabinet = undefined;
-  next();
 });
 
 const Doctor = mongoose.model('Doctor', doctorSchema);

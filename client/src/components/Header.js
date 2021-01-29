@@ -43,7 +43,7 @@ const Header = () => {
                       <i className='fas fa-calendar-alt'> </i> Mes rendez-vous
                     </Nav.Link>
                   </LinkContainer>
-                  <NavDropdown title={userInfo.name} id='username'>
+                  <NavDropdown title={userInfo.prenom} id='username'>
                     <LinkContainer to='/patient/profile'>
                       <NavDropdown.Item>
                         {' '}
@@ -58,13 +58,13 @@ const Header = () => {
                 </>
               ) : doctorInfo ? (
                 <>
-                  <LinkContainer to='/doctor/doctorspace'>
+                  <LinkContainer to='/doctors/doctorspace'>
                     <Nav.Link>
                       <i className='fas fa-user-md'></i> Bonjour{' '}
                       {doctorInfo.prenom}
                     </Nav.Link>
                   </LinkContainer>
-                  <LinkContainer to='/patient/profile'>
+                  <LinkContainer to='/'>
                     <Nav.Link onClick={doctorLogoutHandler}>
                       <i className='fas fa-sign-out-alt'></i> Deconnecter
                     </Nav.Link>
@@ -72,7 +72,7 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  <LinkContainer to='/doctor/login'>
+                  <LinkContainer to='/doctors/login'>
                     <Nav.Link>
                       <i className='fas fa-user-md'></i> Vous etes un medecin?
                     </Nav.Link>

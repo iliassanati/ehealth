@@ -29,7 +29,7 @@ router.get(
 router.post(
   '/signup',
   asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body;
+    const { nom, prenom, email, password } = req.body;
 
     const userExists = await User.findOne({ email });
 
@@ -37,7 +37,7 @@ router.post(
       res.status(400);
       throw new Error('User already exists');
     }
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ nom, prenom, email, password });
 
     if (user) {
       const payload = {
@@ -53,7 +53,8 @@ router.post(
           if (err) throw err;
           res.status(201).json({
             _id: user._id,
-            name: user.name,
+            nom: user.nom,
+            prenom: user.prenom,
             email: user.email,
             isAdmin: user.isAdmin,
             token: token,
@@ -91,7 +92,8 @@ router.post(
           if (err) throw err;
           res.json({
             _id: user._id,
-            name: user.name,
+            nom: user.nom,
+            prenom: user.prenom,
             email: user.email,
             isAdmin: user.isAdmin,
             token: token,
@@ -105,8 +107,8 @@ router.post(
   })
 );
 
-//@desc Update user profile
 //@route PUT /api/users/profile
+//@desc Update user profile
 //@access Private
 router.put(
   '/profile',
@@ -114,7 +116,8 @@ router.put(
   asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {
-      user.name = req.body.name || user.name;
+      user.nom = req.body.nom || user.nom;
+      user.prenom = req.body.prenom || user.prenom;
       user.email = req.body.email || user.email;
       if (req.body.password) {
         user.password = req.body.password;
@@ -134,7 +137,8 @@ router.put(
           if (err) throw err;
           res.json({
             _id: updatedUser._id,
-            name: updatedUser.name,
+            nom: updatedUser.nom,
+            prenom: updatedUser.prenom,
             email: updatedUser.email,
             isAdmin: updatedUser.isAdmin,
             token: token,

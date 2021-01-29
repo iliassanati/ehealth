@@ -66,8 +66,8 @@ const DoctorLoginScreen = ({ location, history }) => {
           <Link
             to={
               redirect
-                ? `/doctor/register?redirect=${redirect}`
-                : '/doctor/register'
+                ? `/doctors/register?redirect=${redirect}`
+                : '/doctors/register'
             }
           >
             <p>
