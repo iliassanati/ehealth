@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 const rdvSchema = mongoose.Schema({
-  user: {
+  userId: {
     type: String,
     required: true,
   },
@@ -46,7 +46,7 @@ rdvSchema.plugin(updateIfCurrentPlugin);
 rdvSchema.statics.build = function (attrs) {
   return new RDV({
     _id: attrs.id,
-    user: attrs.user,
+    userId: attrs.userId,
     totalPrice: attrs.totalPrice,
     status: attrs.status,
     paymentMethod: attrs.paymentMethod,

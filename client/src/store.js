@@ -7,7 +7,6 @@ import {
   userLoginReducer,
   userDetailsReducer,
   userUpdateProfileReducer,
-  userListReducer,
 } from './reducers/userReducers';
 
 import {
@@ -21,6 +20,7 @@ import {
 } from './reducers/doctorReducers';
 
 import {
+  deleteCancelledRdvReducer,
   doctorRdvListReducer,
   patientRdvListReducer,
   rdvCreateReducer,
@@ -42,6 +42,7 @@ const reducer = combineReducers({
   doctorInfoById: doctorInfoByIdReducer,
   doctorUpdateProfile: doctorUpdateProfileReducer,
   doctorReviewCreate: doctorReviewCreateReducer,
+
   rdvInfo: rdvInfoReducer,
   rdvCreate: rdvCreateReducer,
   rdvDetails: rdvDetailsReducer,
@@ -49,6 +50,7 @@ const reducer = combineReducers({
   rdvDeliver: rdvDeliverReducer,
   patientRdvList: patientRdvListReducer,
   doctorRdvList: doctorRdvListReducer,
+  deleteCancelledRdv: deleteCancelledRdvReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

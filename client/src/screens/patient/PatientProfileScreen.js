@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Row, Col, Table, Nav } from 'react-bootstrap';
+import { Form, Button, Row, Col, Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../../components/Message';
@@ -11,6 +11,7 @@ const PatientProfileScreen = ({ location, history }) => {
   const [nom, setNom] = useState('');
   const [prenom, setPrenom] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState(null);
@@ -30,12 +31,14 @@ const PatientProfileScreen = ({ location, history }) => {
     if (!userInfo) {
       history.push('/patient/login');
     } else {
-      if (!user.nom) {
+      if (!user || !user.email || success) {
+        dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails('profile'));
       } else {
         setNom(user.nom);
         setPrenom(user.prenom);
         setEmail(user.email);
+        setPhone(user.phone);
       }
     }
   }, [dispatch, history, userInfo, user, success]);
@@ -46,7 +49,7 @@ const PatientProfileScreen = ({ location, history }) => {
       setMessage('Password do not match');
     } else {
       dispatch(
-        updateUserProfile({ id: user._id, nom, prenom, email, password })
+        updateUserProfile({ id: user._id, nom, prenom, email, phone, password })
       );
     }
   };
@@ -55,17 +58,27 @@ const PatientProfileScreen = ({ location, history }) => {
     <>
       <Row>
         <Col>
-          {userInfo && <h1>Bonjour {userInfo.prenom} </h1>}
+          {userInfo && (
+            <h3>
+              {' '}
+              <i className='fas fa-medical'></i> Bonjour {userInfo.prenom}{' '}
+            </h3>
+          )}
           <Nav className='justify-content-center mb-4'>
             <Nav.Item>
               <LinkContainer to='/patient/profile'>
-                <Nav.Link className='btn btn-light my-3'>Mon profile</Nav.Link>
+                <Nav.Link className='btn btn-light my-3'>
+                  <i className='fas fa-user'></i> Mon profile
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
 
             <Nav.Item>
               <LinkContainer to='/patient/rdvs'>
-                <Nav.Link className='btn btn-light my-3'>Mes rdvs</Nav.Link>
+                <Nav.Link className='btn btn-light my-3'>
+                  {' '}
+                  <i className='fas fa-calendar-alt'> </i> Mes rdvs
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
 
@@ -95,7 +108,7 @@ const PatientProfileScreen = ({ location, history }) => {
             </Form.Group>
 
             <Form.Group controlId='prenom'>
-              <Form.Label>Nom complet</Form.Label>
+              <Form.Label>Prenom</Form.Label>
               <Form.Control
                 type='prenom'
                 placeholder='Enter votre prénom'
@@ -104,8 +117,18 @@ const PatientProfileScreen = ({ location, history }) => {
               ></Form.Control>
             </Form.Group>
 
+            <Form.Group controlId='phone'>
+              <Form.Label>Numero de telephone</Form.Label>
+              <Form.Control
+                type='phone'
+                placeholder='Enter votre numero de telephone'
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
             <Form.Group controlId='email'>
-              <Form.Label>Email Address</Form.Label>
+              <Form.Label>Adresse email</Form.Label>
               <Form.Control
                 type='email'
                 placeholder='Enter email'
@@ -133,10 +156,11 @@ const PatientProfileScreen = ({ location, history }) => {
                 onChange={e => setConfirmPassword(e.target.value)}
               ></Form.Control>
             </Form.Group>
-
-            <Button type='submit' variant='primary'>
-              Update
-            </Button>
+            <Col className='text-right'>
+              <Button type='submit' variant='primary'>
+                Update
+              </Button>
+            </Col>
           </Form>
         </Col>
       </Row>

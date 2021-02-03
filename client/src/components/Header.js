@@ -58,7 +58,7 @@ const Header = () => {
                 </>
               ) : doctorInfo ? (
                 <>
-                  <LinkContainer to='/doctors/doctorspace'>
+                  <LinkContainer to='/doctors/profile'>
                     <Nav.Link>
                       <i className='fas fa-user-md'></i> Bonjour{' '}
                       {doctorInfo.prenom}

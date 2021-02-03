@@ -24,8 +24,15 @@ h4 {
   margin: 0.09rem;
 }
 
-.map {
+.map-doctor-profile {
   width: 60vw;
+  height: 60vh;
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.map-doctor-info {
+  width: 50vw;
   height: 60vh;
   position: relative;
   padding-bottom: 20px;
@@ -60,4 +67,16 @@ h4 {
 
 .image-profile {
   padding-bottom: 5px;
+}
+
+.steps {
+  padding-bottom: 10px;
+}
+
+.doctor {
+  margin-left: 10px;
+}
+
+.card-title {
+  padding-top: 10px;
 }

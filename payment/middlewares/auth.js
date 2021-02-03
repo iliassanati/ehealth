@@ -28,22 +28,35 @@ const auth = (req, res, next) => {
   }
 };
 
-export { auth };
+const admin = (req, res, next) => {
+  //Get token from header
+  let token;
+  token = req.headers.authorization.split(' ')[1];
 
-//   //Get token from header hello
-//   const token = req.header('x-auth-token');
+  //check if not token
+  if (!token) {
+    res.status(401);
+    throw new Error('Not authorized, no token');
+  }
 
-//   //check if not token
-//   if (!token) {
-//     return res.status(401).json({ msg: 'No token, authorization denied' });
-//   }
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    //verify token
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_KEY_ADMIN);
 
-//   //verify token
-//   try {
-//     const decoded = jwt.verify(token, process.env.JWT_KEY);
-//     req.user = decoded.user;
-//     next();
-//   } catch (err) {
-//     res.status(401).json({ msg: 'Token is not valid' });
-//   }
-// };
+      console.log(decoded);
+      req.user = decoded.user;
+      req.doctor = decoded.doctor;
+
+      next();
+    } catch (error) {
+      res.status(401);
+      throw new Error('Not authorized, token failed');
+    }
+  }
+};
+
+export { auth, admin };

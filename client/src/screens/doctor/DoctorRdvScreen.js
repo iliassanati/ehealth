@@ -5,6 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import { doctorMyrdvs } from '../../actions/rdvActions';
+import moment from 'moment';
 
 const DoctorRdvScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -77,11 +78,13 @@ const DoctorRdvScreen = ({ history }) => {
                 {rdvs.map(rdv => (
                   <tr key={rdv._id}>
                     <td>{rdv._id}</td>
-                    <td>{rdv.createdAt.substring(0, 10)}</td>
+                    <td>
+                      {moment(rdv.createdAt).format('MMMM Do YYYY, h:mm ')}
+                    </td>
                     <td>{rdv.totalPrice}</td>
                     <td>
                       {rdv.isPaid ? (
-                        rdv.paidAt.substring(0, 10)
+                        moment(rdv.paidAt).format('MMMM Do YYYY, h:mm a')
                       ) : (
                         <i
                           className='fas fa-times'
@@ -91,7 +94,7 @@ const DoctorRdvScreen = ({ history }) => {
                     </td>
                     <td>
                       {rdv.isDelivered ? (
-                        rdv.deliveredAt.substring(0, 10)
+                        moment(rdv.deliveredAt).format('MMMM Do YYYY, h:mm a')
                       ) : (
                         <i
                           className='fas fa-times'

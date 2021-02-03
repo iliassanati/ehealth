@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Form, Row, Col, Nav, Button, Card } from 'react-bootstrap';
+import { Row, Col, Nav, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Link } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { doctorPatientDetails } from '../../actions/userActions.js';
 import { doctorMyrdvs } from '../../actions/rdvActions.js';
+import moment from 'moment';
 
 const DoctorPatientsScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -23,6 +22,8 @@ const DoctorPatientsScreen = ({ history }) => {
       dispatch(doctorMyrdvs());
     }
   }, [dispatch, history, doctorInfo]);
+
+  console.log(rdvs);
 
   return (
     <>
@@ -54,6 +55,43 @@ const DoctorPatientsScreen = ({ history }) => {
               </LinkContainer>
             </Nav.Item>
           </Nav>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col md={12}>
+          <h2>Mes patiens</h2>
+          {loading ? (
+            <Loader />
+          ) : error ? (
+            <Message variant='danger'>{error}</Message>
+          ) : (
+            <Table striped bordered hover responsive className='table-sm'>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>NOM</th>
+                  <th>PRENOM</th>
+                  <th>TELEPHONES</th>
+                  <th>DATE</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {rdvs.map(rdv => (
+                  <tr key={rdv._id}>
+                    <td>{rdv.userId}</td>
+                    <td>{rdv.userNom}</td>
+                    <td>{rdv.userPrenom}</td>
+                    <td>{rdv.userPhone}</td>
+                    <td>
+                      {moment(rdv.rdvDate).format('MMMM Do YYYY, h:mm a')}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
         </Col>
       </Row>
     </>

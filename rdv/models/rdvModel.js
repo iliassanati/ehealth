@@ -4,7 +4,19 @@ import { RdvStatus } from '../events/types/rdv-status.js';
 
 const rdvSchema = mongoose.Schema(
   {
-    user: {
+    userId: {
+      type: String,
+      required: true,
+    },
+    userNom: {
+      type: String,
+      required: true,
+    },
+    userPrenom: {
+      type: String,
+      required: true,
+    },
+    userPhone: {
       type: String,
       required: true,
     },

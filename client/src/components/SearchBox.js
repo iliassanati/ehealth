@@ -5,8 +5,6 @@ const SearchBox = ({ history }) => {
   const [keyword1, setKeyword1] = useState('');
   const [keyword2, setKeyword2] = useState('');
 
-  const keyword = { keyword1, keyword2 };
-
   const submitHandler = e => {
     e.preventDefault();
 

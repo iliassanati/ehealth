@@ -1,4 +1,6 @@
+import path from 'path';
 import express from 'express';
+import multer from 'multer';
 import Doctor from '../models/doctorModel.js';
 import { auth } from '../middlewares/auth.js';
 import asyncHandler from 'express-async-handler';
@@ -200,8 +202,8 @@ router.put(
       doctor.description = req.body.description || doctor.description;
       doctor.diplomesEtFormations =
         req.body.diplomesEtFormations || doctor.diplomesEtFormations;
-      doctor.InformationsPratiques =
-        req.body.InformationsPratiques || doctor.InformationsPratiques;
+      doctor.informationsPratiques =
+        req.body.informationsPratiques || doctor.informationsPratiques;
 
       if (req.body.password) {
         doctor.password = req.body.password;
@@ -331,5 +333,46 @@ router.post(
     }
   })
 );
+
+//@route POST /api/doctors/uploads
+//@desc Upload a new image
+//@access Private
+
+// const __dirname = path.resolve();
+// express().use('/app', express.static(path.join(__dirname, '/app')));
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename(req, file, cb) {
+    cb(
+      null,
+      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
+    );
+  },
+});
+
+function checkFileType(file, cb) {
+  const filetypes = /jpg|jpeg|png/;
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = filetypes.test(file.mimetype);
+
+  if (extname && mimetype) {
+    return cb(null, true);
+  } else {
+    cb('Images only!');
+  }
+}
+
+const upload = multer({
+  storage,
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+});
+
+router.post('/uploads', upload.single('image'), (req, res) => {
+  res.send(`/${req.file.path}`);
+});
 
 export default router;

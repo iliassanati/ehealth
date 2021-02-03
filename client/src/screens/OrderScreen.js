@@ -5,12 +5,13 @@ import StripeCheckout from 'react-stripe-checkout';
 import Message from '../components/Message';
 import Loader from '../components/Loader.js';
 import moment from 'moment';
-import { RDV_PAY_RESET } from '../constants/rdvConstants';
+import { RDV_PAY_RESET, RDV_DELIVER_RESET } from '../constants/rdvConstants';
 import {
   doctorGetRdvDetails,
   patientGetRdvDetails,
   deliverRdv,
   payRdv,
+  cancelledRdvDelete,
 } from '../actions/rdvActions.js';
 
 const OrderScreen = ({ match, history }) => {
@@ -20,14 +21,14 @@ const OrderScreen = ({ match, history }) => {
 
   const dispatch = useDispatch();
 
-  const rdvDetails = useSelector(state => state.rdvDetails);
-  const { rdv, error, loading } = rdvDetails;
-
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
   const doctorLogin = useSelector(state => state.doctorLogin);
   const { doctorInfo } = doctorLogin;
+
+  const rdvDetails = useSelector(state => state.rdvDetails);
+  const { rdv, error, loading } = rdvDetails;
 
   const rdvPay = useSelector(state => state.rdvPay);
   const { loading: loadingPay, success: successPay } = rdvPay;
@@ -35,30 +36,46 @@ const OrderScreen = ({ match, history }) => {
   const rdvDeliver = useSelector(state => state.rdvDeliver);
   const { loading: loadingDeliver, success: successDeliver } = rdvDeliver;
 
-  useEffect(() => {
-    const findTimeLeft = () => {
-      const minLeft = new Date(rdv.expiresAt) - new Date();
-      setTimeLeft(Math.round(minLeft / 1000));
-    };
-    findTimeLeft();
-    const timerId = setInterval(findTimeLeft, 1000);
+  const deleteCancelledRdv = useSelector(state => state.deleteCancelledRdv);
+  const { success: deleteSuccess } = deleteCancelledRdv;
 
-    if (!rdv._id || successPay || successDeliver) {
+  useEffect(() => {
+    if (!rdv || !rdv._id || successPay || successDeliver || deleteSuccess) {
       dispatch({ type: RDV_PAY_RESET });
-      if (userInfo) {
+      dispatch({ type: RDV_DELIVER_RESET });
+
+      if (userInfo || rdv) {
         dispatch(patientGetRdvDetails(rdvId));
       } else {
         dispatch(doctorGetRdvDetails(rdvId));
       }
     }
 
-    return () => {
-      clearInterval(timerId);
-    };
-  }, [dispatch, rdv, rdvId, successPay, userInfo, history, successDeliver]);
+    if (rdv) {
+      if (rdv.status !== 'complete') {
+        const findTimeLeft = () => {
+          const minLeft = new Date(rdv.expiresAt) - new Date();
+          setTimeLeft(Math.round(minLeft / 1000));
+        };
+        findTimeLeft();
+        const timerId = setInterval(findTimeLeft, 1000);
+
+        return () => {
+          clearInterval(timerId);
+        };
+      }
+    }
+  }, [
+    dispatch,
+    rdv,
+    rdvId,
+    successPay,
+    userInfo,
+    successDeliver,
+    deleteSuccess,
+  ]);
 
   const payOrderHandler = token => {
-    console.log(token.id);
     dispatch(payRdv(token.id, rdv._id));
   };
 
@@ -67,8 +84,13 @@ const OrderScreen = ({ match, history }) => {
   };
 
   if (timeLeft < 0) {
-    return <div>Rdv Expired</div>;
+    setTimeLeft(0);
+    dispatch(cancelledRdvDelete(rdvId));
+    alert("Le Rdv est supprime, Essayer de payer avec l'expiration du temsp");
+    // dispatch({ type: RDV_DELETE_CANCELLED_RESET });
+    history.push('/');
   }
+
   return (
     <>
       {loading ? (
@@ -77,37 +99,48 @@ const OrderScreen = ({ match, history }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <Row>
-          <Col md={8}>
+          <Col md={7}>
             <ListGroup variant='flush'>
               <ListGroup.Item>
-                <p> Time left to pay: {timeLeft} seconds</p>
-                <h2>Date de rendez-vous</h2>
+                {!deleteSuccess && !isNaN(timeLeft) && (
+                  <Message variant='primary'>
+                    {' '}
+                    Temps restant pour effectuer le payment: {timeLeft} seconde
+                  </Message>
+                )}
+
+                <h2>Date du rendez-vous</h2>
 
                 <p>
                   <strong>Date: </strong>{' '}
-                  {moment(rdv.rdvDate).format('MMMM Do YYYY, h:mm:ss a')}
+                  {rdv && moment(rdv.rdvDate).format('MMMM Do YYYY, h:mm:ss a')}
                 </p>
-                {rdv.isDelivered ? (
+                {rdv && rdv.isDelivered ? (
                   <Message variant='success'>
-                    Delivered on{' '}
+                    Consultation est faite le:{' '}
                     {moment(rdv.deliveredAt).format('MMMM Do YYYY, h:mm a')}
                   </Message>
                 ) : (
-                  <Message variant='danger'>Not Delivered</Message>
+                  <Message variant='danger'>
+                    Consultation n'a pas encore eu lieu
+                  </Message>
                 )}
               </ListGroup.Item>
 
               <ListGroup.Item>
-                <h2>Payment Method</h2>
+                <h2>Methode de payement</h2>
                 <p>
-                  <strong>Method: </strong> {rdv.paymentMethod}
+                  <strong>Methode: </strong> {rdv && rdv.paymentMethod}
                 </p>
-                {rdv.isPaid ? (
+                {rdv && rdv.isPaid ? (
                   <Message variant='success'>
-                    Paid on {moment(rdv.paidAt).format('MMMM Do YYYY, h:mm a')}
+                    Rdv est paye le :{' '}
+                    {rdv && moment(rdv.paidAt).format('MMMM Do YYYY, h:mm a')}
                   </Message>
                 ) : (
-                  <Message variant='danger'>Not Paid</Message>
+                  <Message variant='danger'>
+                    Le rdv n'est pas encore paye
+                  </Message>
                 )}
               </ListGroup.Item>
 
@@ -115,62 +148,66 @@ const OrderScreen = ({ match, history }) => {
                 <h2>Reference du rendez-vous</h2>
                 <p>
                   <strong> Rendez-vous numéro: </strong>
-                  {rdv._id}
+                  {rdv && rdv._id}
                 </p>
               </ListGroup.Item>
             </ListGroup>
           </Col>
 
-          <Col md={4}>
+          <Col md={5} style={{ paddingTop: '2rem' }}>
             <Card>
               <ListGroup variant='flush'>
-                <ListGroup.Item>
-                  <h2>Resume de rdv</h2>
+                <ListGroup.Item className='text-center'>
+                  <h2>Resume du rdv</h2>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
-                    <Col>Type de consultation</Col>
-                    <Col>{rdv.typeConsultation}</Col>
+                    <Col>Type de consultation:</Col>
+                    <Col className='text-center'>
+                      {rdv && rdv.typeConsultation}
+                    </Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
-                    <Col>Prix de consultation</Col>
-                    <Col>{rdv.rdvPrix} MAD</Col>
-                  </Row>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Tax</Col>
-                    <Col>{rdv.taxPrice} MAD</Col>
+                    <Col>Prix de consultation:</Col>
+                    <Col className='text-center'>{rdv && rdv.rdvPrix} MAD</Col>
                   </Row>
                 </ListGroup.Item>
 
                 <ListGroup.Item>
                   <Row>
-                    <Col>Total</Col>
-                    <Col>{rdv.totalPrice} MAD</Col>
+                    <Col>Tax:</Col>
+                    <Col className='text-center'>{rdv && rdv.taxPrice} MAD</Col>
+                  </Row>
+                </ListGroup.Item>
+
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Total:</Col>
+                    <Col className='text-center'>
+                      {rdv && rdv.totalPrice} TTC
+                    </Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   {error && <Message variant='danger'>{error}</Message>}
                 </ListGroup.Item>
 
-                {!rdv.isPaid && (
-                  <ListGroup.Item>
+                {rdv && !rdv.isPaid && (
+                  <ListGroup.Item className='text-center'>
                     {loadingPay && <Loader />}
                     <StripeCheckout
                       token={token => payOrderHandler(token)}
                       stripeKey='pk_test_51ICwtAG4v7xutw0nScewa89wHKnVY9QnlAuT7yLL1gTsWr0ogJGNsaIijpaAzb0sfQaRKh2ylDUt5gPSamsQhQWH00xHZqhuts'
-                      amount={rdv.totalPrice * 100}
+                      amount={rdv && rdv.totalPrice * 100}
                       email={userInfo && userInfo.email}
                       currency='MAD'
                     />
                   </ListGroup.Item>
                 )}
                 {loadingDeliver && <Loader />}
-                {doctorInfo && rdv.isPaid && !rdv.isDelivered && (
+                {rdv && doctorInfo && rdv.isPaid && !rdv.isDelivered && (
                   <ListGroup.Item>
                     <Button
                       type='button'

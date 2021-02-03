@@ -2,8 +2,12 @@ import {
   RDV_CREATE_FAIL,
   RDV_CREATE_REQUEST,
   RDV_CREATE_SUCCESS,
+  RDV_DELETE_CANCELLED_FAIL,
+  RDV_DELETE_CANCELLED_REQUEST,
+  RDV_DELETE_CANCELLED_SUCCESS,
   RDV_DELIVER_FAIL,
   RDV_DELIVER_REQUEST,
+  RDV_DELIVER_SUCCESS,
   RDV_DETAILS_FAIL,
   RDV_DETAILS_REQUEST,
   RDV_DETAILS_SUCCESS,
@@ -105,6 +109,31 @@ export const doctorGetRdvDetails = id => async (dispatch, getState) => {
   }
 };
 
+export const userGetRdvs = id => async (dispatch, getState) => {
+  try {
+    dispatch({ type: RDV_DETAILS_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/rdvs/${id}`, config);
+    dispatch({ type: RDV_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: RDV_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
 export const payRdv = (token, rdvId) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -162,7 +191,7 @@ export const deliverRdv = rdv => async (dispatch, getState) => {
       config
     );
 
-    dispatch({ type: RDV_DETAILS_SUCCESS, payload: data });
+    dispatch({ type: RDV_DELIVER_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
       type: RDV_DELIVER_FAIL,
@@ -228,29 +257,34 @@ export const doctorMyrdvs = () => async (dispatch, getState) => {
   }
 };
 
-// export const deleteRdv = id => async (dispatch, getState) => {
-//   try {
-//     dispatch({ type: RDV_DELETE_REQUEST });
+export const cancelledRdvDelete = id => async (dispatch, getState) => {
+  try {
+    dispatch({ type: RDV_DELETE_CANCELLED_REQUEST });
 
-//     const {
-//       userLogin: { userInfo },
-//     } = getState();
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-//     const config = {
-//       headers: {
-//         Authorization: `Bearer ${userInfo.token}`,
-//       },
-//     };
-//     await axios.delete(`/api/rdvs/${id}`, config);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.post(`/api/rdvs/${id}/delete`, {}, config);
 
-//     dispatch({ type: RDV_DELETE_SUCCESS });
-//   } catch (error) {
-//     dispatch({
-//       type: RDV_DELETE_FAIL,
-//       payload:
-//         error.message && error.response.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     });
-//   }
-// };
+    dispatch({ type: RDV_DELETE_CANCELLED_SUCCESS, payload: data });
+
+    localStorage.removeItem('date');
+    localStorage.removeItem('renseignements');
+    localStorage.removeItem('paymentMethod');
+  } catch (error) {
+    dispatch({
+      type: RDV_DELETE_CANCELLED_FAIL,
+      payload:
+        error.message && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

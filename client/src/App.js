@@ -12,7 +12,6 @@ import PatientProfileScreen from './screens/patient/PatientProfileScreen';
 //Doctor Screen
 import DoctorLoginScreen from './screens/doctor/DoctorLoginScreen';
 import DoctorRegisterScreen from './screens/doctor/DoctorRegisterScreen';
-import DoctorSpaceScreen from './screens/doctor/DoctorSpaceScreen';
 import DoctorProfileScreen from './screens/doctor/DoctorProfileScreen';
 import DoctorPatientsScreen from './screens/doctor/DoctorPatientsScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -50,7 +49,6 @@ function App() {
 
             <Route path='/doctors/login' component={DoctorLoginScreen} />
             <Route path='/doctors/register' component={DoctorRegisterScreen} />
-            <Route path='/doctors/doctorspace' component={DoctorSpaceScreen} />
             <Route path='/doctors/profile' component={DoctorProfileScreen} />
             <Route path='/doctors/patients' component={DoctorPatientsScreen} />
             <Route path='/doctors/rdvs' component={DoctorRdvScreen} />

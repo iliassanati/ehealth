@@ -1,8 +1,10 @@
+import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import colors from 'colors';
 import connectDB from './config/db.js';
 import doctorRoutes from './routes/doctorRoutes.js';
+// import uploadRoutes from './routes/uploadRoutes.js';
 import { errorHandler, notFound } from './middlewares/errorMiddleware.js';
 import { natsWrapper } from './nats-wrapper.js';
 import { RdvCreatedListener } from './events/listeners/rdv-created-listener.js';
@@ -35,6 +37,10 @@ try {
 app.use(express.json());
 
 app.use('/api/doctors', doctorRoutes);
+// app.use('/api/upload', uploadRoutes);
+
+// const __dirname = path.resolve();
+// app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 app.use(notFound);
 app.use(errorHandler);

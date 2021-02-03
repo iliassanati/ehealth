@@ -1,47 +1,57 @@
 import DayTimePicker from '@mooncake-dev/react-day-time-picker';
 import styled from 'styled-components';
 
-const Container = styled.div`
-  width: 475px;
-  margin: 1em auto;
+const theme = {
+  primary: '#6cf075',
+  secondary: 'slategrey',
+  background: '#fcfcfc', // This should match the container background
+  buttons: {
+    disabled: {
+      color: '#333',
+      background: '#f0f0f0',
+    },
+    confirm: {
+      color: '#fff',
+      background: 'slategrey',
+      hover: {
+        color: '',
+        background: 'lightslategrey',
+      },
+    },
+  },
+  feedback: {
+    success: {
+      color: '#29aba4',
+    },
+    failed: {
+      color: '#eb7260',
+    },
+  },
+};
+const GreyContainer = styled.div`
+  width: 450px;
   padding: 1em;
-  background-color: #fff;
-  color: #333;
-  border: 1px solid #f0f0f0;
+  background-color: #fffffff;
+  color: #000000;
   border-radius: 5px;
   text-align: center;
-  box-shadow: 0 2px 4px #00000018;
   @media (max-width: 520px) {
     width: 100%;
   }
 `;
 
-const timeSlotValidator = slotTime => {
-  const morningTime = new Date(
-    slotTime.getFullYear(),
-    slotTime.getMonth(),
-    slotTime.getDate(),
-    '09',
-    '0',
-    '0'
-  );
-
-  const isValid = slotTime.getTime() > morningTime.getTime();
-
-  return isValid;
-};
-
-const Calendar = ({ handleScheduled }) => {
+const Calendar = ({ handleScheduled, timeSlotValidator }) => {
   return (
-    <Container>
+    <GreyContainer>
       <h6>Choisissez une date et une heure</h6>
 
       <DayTimePicker
+        theme={theme}
         timeSlotSizeMinutes={30}
         onConfirm={handleScheduled}
         timeSlotValidator={timeSlotValidator}
       />
-    </Container>
+    </GreyContainer>
   );
 };
 

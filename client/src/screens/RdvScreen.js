@@ -5,6 +5,7 @@ import { saveRenseignements } from '../actions/rdvInfoActions';
 import CheckoutSteps from '../components/CheckoutSteps';
 import moment from 'moment';
 import { getDoctorInfo } from '../actions/doctorActions';
+import Rating from '../components/Rating';
 
 const RdvScreen = ({ history, match }) => {
   const [etatClient, setEtatClient] = useState('Je suis un nouveau patient');
@@ -14,7 +15,7 @@ const RdvScreen = ({ history, match }) => {
   const dispatch = useDispatch();
 
   const doctorInfoById = useSelector(state => state.doctorInfoById);
-  const { loading, doctor, error } = doctorInfoById;
+  const { doctor } = doctorInfoById;
 
   const rdvInfo = useSelector(state => state.rdvInfo);
   const { date } = rdvInfo;
@@ -39,8 +40,9 @@ const RdvScreen = ({ history, match }) => {
 
   return (
     <>
-      <CheckoutSteps step1 step2 step3 />
+      <CheckoutSteps step1 step2 step3 doctor={doctor} />
       <h1>Prendre rendez-vous en ligne</h1>
+      <br />
       <Row>
         <Col md={5}>
           <p>Heure de votre rendez-vous:</p>
@@ -51,77 +53,85 @@ const RdvScreen = ({ history, match }) => {
               </InputGroup.Text>
             </InputGroup.Prepend>
           </InputGroup>
-          <Card>
+          <br />
+          <Card className='text-center'>
             <Card.Img variant='top' src={doctor.image} />
-            <Card.Body>
+            <Card.Body center>
               <Card.Title>
                 {doctor.titre} {doctor.nom} {doctor.prenom}{' '}
               </Card.Title>
               <Card.Title>{doctor.specialite}</Card.Title>
-              <Card.Text>{doctor.addressCabinet}</Card.Text>
+              <Card.Text>
+                {doctor.addressCabinet} {doctor.ville}
+              </Card.Text>
+              <Card.Text as='div'>
+                <Rating value={doctor.rating} text={` Reviews`} />
+              </Card.Text>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={7}>
-          <Form onSubmit={submitHandler}>
-            <h5>AVEZ-VOUS DÉJÀ CONSULTÉ CE PRATICIEN AUPARAVANT ?</h5>
+        <Col md={7} style={{ paddingTop: '9.5rem' }}>
+          <Card>
+            <Card.Title
+              className='text-center'
+              style={{ paddingTop: '1.5rem' }}
+            >
+              AVEZ-VOUS DÉJÀ CONSULTÉ CE PRATICIEN AUPARAVANT ?
+            </Card.Title>
+            <Card.Body center>
+              <Form onSubmit={submitHandler}>
+                <Form.Group controlId='groupOptions'>
+                  <Form.Control as='radio' required>
+                    <Form.Check
+                      type='radio'
+                      id='defaultRadio'
+                      name='groupOptions'
+                      label='Je suis un nouveau patient'
+                      value='Je suis un nouveau patient'
+                      onChange={e => setEtatClient(e.target.value)}
+                    />
+                  </Form.Control>
+                  <Form.Control as='radio' required>
+                    <Form.Check
+                      type='radio'
+                      id='defaultRadio'
+                      name='groupOptions'
+                      label='Je suis déjà patient de ce médecin'
+                      value='Je suis déjà patient de ce médecin'
+                      onChange={e => setEtatClient(e.target.value)}
+                    />
+                  </Form.Control>
+                </Form.Group>
 
-            <Form.Group>
-              <Form.Control as='radio'>
-                <Form.Check
-                  type='radio'
-                  id='defaultRadio'
-                  name='groupOptions'
-                  label='Je suis un nouveau patient'
-                  value='Je suis un nouveau patient'
-                  onChange={e => setEtatClient(e.target.value)}
-                />
-                <Form.Check
-                  type='radio'
-                  id='defaultRadio'
-                  name='groupOptions'
-                  label='Je suis déjà patient de ce médecin'
-                  value='Je suis déjà patient de ce médecin'
-                  onChange={e => setEtatClient(e.target.value)}
-                />
-              </Form.Control>
-            </Form.Group>
+                <Form.Group controlId='type'>
+                  <Form.Label>Type de consultation:</Form.Label>
+                  <Form.Control
+                    as='select'
+                    value={typeConsultation}
+                    onChange={e => setTypeConsultation(e.target.value)}
+                  >
+                    <option>Choisissez une</option>
+                    <option>Consultation en presentiel</option>
+                    <option>Teleconsultation</option>
+                  </Form.Control>
+                </Form.Group>
 
-            <Form.Group controlId='type'>
-              <Form.Label>Type de consultation</Form.Label>
-              <Form.Control
-                as='select'
-                value={typeConsultation}
-                onChange={e => setTypeConsultation(e.target.value)}
-              >
-                <option>Choisissez une</option>
-                <option>Consultation en presentiel</option>
-                <option>Teleconsultation</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='exampleForm.ControlTextarea1'>
-              <Form.Label>Renseignements medicaux</Form.Label>
-              <Form.Control
-                as='textarea'
-                value={renseignementMedicaux}
-                onChange={e => setRenseignementMedicaux(e.target.value)}
-              />
-            </Form.Group>
-
-            {/* <Form.Group controlId='password'>
-          <Form.Label>Prix de la consultation</Form.Label>
-          <Form.Control
-            type='password'
-            placeholder='Enter votre mot de passe'
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group> */}
-            <Button type='submit' variant='primary'>
-              Valider
-            </Button>
-          </Form>
+                <Form.Group controlId='exampleForm.ControlTextarea1'>
+                  <Form.Label>Renseignements medicaux:</Form.Label>
+                  <Form.Control
+                    as='textarea'
+                    value={renseignementMedicaux}
+                    onChange={e => setRenseignementMedicaux(e.target.value)}
+                  />
+                </Form.Group>
+                <Col className='text-right'>
+                  <Button type='submit' variant='primary'>
+                    Valider
+                  </Button>
+                </Col>
+              </Form>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </>

@@ -12,11 +12,11 @@ export class RdvCreatedListener extends Listener {
   }
 
   async onMessage(data, msg) {
-    const { id, user, version, status, paymentMethod, totalPrice } = data;
+    const { id, userId, version, status, paymentMethod, totalPrice } = data;
 
     const rdv = RDV.build({
       id,
-      user,
+      userId,
       totalPrice,
       status,
       paymentMethod,

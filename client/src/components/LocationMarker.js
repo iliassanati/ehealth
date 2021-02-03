@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, InlineIcon } from '@iconify/react';
+import { Icon } from '@iconify/react';
 import mapPin from '@iconify-icons/fa-solid/map-pin';
 
 const LocationMarker = ({ lat, lng, onClick }) => {

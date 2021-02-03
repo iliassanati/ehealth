@@ -11,10 +11,13 @@ import { getDoctorInfo } from '../actions/doctorActions';
 const PlaceOrderScreen = ({ history, match }) => {
   const dispatch = useDispatch();
 
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
+
   const rdvInfo = useSelector(state => state.rdvInfo);
 
   const doctorInfoById = useSelector(state => state.doctorInfoById);
-  const { loading, doctor } = doctorInfoById;
+  const { doctor } = doctorInfoById;
 
   //Calculate prices
   const addDecimals = num => {
@@ -48,6 +51,9 @@ const PlaceOrderScreen = ({ history, match }) => {
 
   const placeOrderHandler = () => {
     const rdv = {
+      userNom: userInfo.nom,
+      userPrenom: userInfo.prenom,
+      userPhone: userInfo.phone,
       doctorId: doctor._id,
       doctorNom: doctor.nom,
       doctorPrenom: doctor.prenom,
@@ -65,9 +71,9 @@ const PlaceOrderScreen = ({ history, match }) => {
   };
   return (
     <>
-      <CheckoutSteps step1 step2 step3 step4 />
+      <CheckoutSteps step1 step2 step3 step4 step5 doctor={doctor} />
       <Row>
-        <Col md={8}>
+        <Col md={7}>
           <ListGroup variant='flush'>
             <ListGroup.Item>
               <h2>Date de rendez-vous</h2>
@@ -78,8 +84,8 @@ const PlaceOrderScreen = ({ history, match }) => {
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>Payment Method</h2>
-              <strong>Method: </strong> {rdvInfo.paymentMethod}
+              <h2>Methode de payment</h2>
+              <strong>Methode: </strong> {rdvInfo.paymentMethod}
             </ListGroup.Item>
 
             <ListGroup.Item>
@@ -99,7 +105,9 @@ const PlaceOrderScreen = ({ history, match }) => {
                     <Col>
                       {doctor.titre} {doctor.nom} {doctor.prenom}{' '}
                     </Col>
-                    <Col md={4}>{doctor.specialite}</Col>
+                    <Col md={4} className='text-center'>
+                      {doctor.specialite}
+                    </Col>
                   </Row>
                 </ListGroup.Item>
               </ListGroup>
@@ -107,36 +115,40 @@ const PlaceOrderScreen = ({ history, match }) => {
           </ListGroup>
         </Col>
 
-        <Col md={4}>
+        <Col md={5}>
           <Card>
             <ListGroup variant='flush'>
-              <ListGroup.Item>
-                <h2>Resume de rdv</h2>
+              <ListGroup.Item className='text-center'>
+                <h2>Resume du rdv</h2>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Type de consultation</Col>
-                  <Col>{rdvInfo.renseignements.typeConsultation}</Col>
+                  <Col>Type de consultation:</Col>
+                  <Col className='text-center'>
+                    {rdvInfo.renseignements.typeConsultation}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Prix de consultation</Col>
-                  <Col>{doctor.prixConsultation} MAD</Col>
-                </Row>
-              </ListGroup.Item>
-
-              <ListGroup.Item>
-                <Row>
-                  <Col>Tax</Col>
-                  <Col>{rdvInfo.taxPrice} MAD</Col>
+                  <Col>Prix de consultation:</Col>
+                  <Col className='text-center'>
+                    {doctor.prixConsultation} MAD
+                  </Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
-                  <Col>{rdvInfo.totalPrice} MAD</Col>
+                  <Col>Tax:</Col>
+                  <Col className='text-center'>{rdvInfo.taxPrice} MAD</Col>
+                </Row>
+              </ListGroup.Item>
+
+              <ListGroup.Item>
+                <Row>
+                  <Col>Total:</Col>
+                  <Col className='text-center'>{rdvInfo.totalPrice} TTC</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>

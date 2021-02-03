@@ -21,7 +21,11 @@ import {
   RDV_DOCTOR_LIST_SUCCESS,
   RDV_DOCTOR_LIST_FAIL,
   RDV_DOCTOR_LIST_RESET,
-  RDV_DELETE_SUCCESS,
+  RDV_DELETE_CANCELLED_REQUEST,
+  RDV_DELETE_CANCELLED_SUCCESS,
+  RDV_DELETE_CANCELLED_FAIL,
+  RDV_DELETE_CANCELLED_RESET,
+  RDV_DETAILS_RESET,
 } from '../constants/rdvConstants';
 
 export const rdvCreateReducer = (state = {}, action) => {
@@ -69,6 +73,8 @@ export const rdvDetailsReducer = (state = { rdv: {} }, action) => {
         loading: false,
         error: action.payload,
       };
+    case RDV_DETAILS_RESET:
+      return {};
 
     default:
       return state;
@@ -178,6 +184,34 @@ export const doctorRdvListReducer = (state = { rdvs: [] }, action) => {
       return {
         rdvs: [],
       };
+
+    default:
+      return state;
+  }
+};
+
+export const deleteCancelledRdvReducer = (state = { rdv: {} }, action) => {
+  switch (action.type) {
+    case RDV_DELETE_CANCELLED_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case RDV_DELETE_CANCELLED_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+
+    case RDV_DELETE_CANCELLED_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case RDV_DELETE_CANCELLED_RESET:
+      return {};
 
     default:
       return state;

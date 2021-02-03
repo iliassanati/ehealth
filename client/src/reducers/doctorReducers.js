@@ -166,6 +166,7 @@ export const doctorUpdateProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case DOCTOR_UPDATE_PROFILE_REQUEST:
       return {
+        ...state,
         loading: true,
       };
 
@@ -194,6 +195,7 @@ export const doctorReviewCreateReducer = (state = {}, action) => {
   switch (action.type) {
     case DOCTOR_CREATE_REVIEW_REQUEST:
       return {
+        ...state,
         loading: true,
       };
 

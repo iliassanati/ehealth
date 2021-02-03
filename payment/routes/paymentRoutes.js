@@ -26,7 +26,7 @@ router.post(
       throw new Error('Rdv not found');
     }
 
-    if (rdv.user !== req.user._id) {
+    if (rdv.userId !== req.user._id) {
       res.status(404);
       throw new Error('Not Authorized');
     }
