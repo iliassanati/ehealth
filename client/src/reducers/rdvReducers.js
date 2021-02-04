@@ -26,6 +26,10 @@ import {
   RDV_DELETE_CANCELLED_FAIL,
   RDV_DELETE_CANCELLED_RESET,
   RDV_DETAILS_RESET,
+  RDV_USER_LIST_REQUEST,
+  RDV_USER_LIST_SUCCESS,
+  RDV_USER_LIST_FAIL,
+  RDV_USER_LIST_RESET,
 } from '../constants/rdvConstants';
 
 export const rdvCreateReducer = (state = {}, action) => {
@@ -74,6 +78,33 @@ export const rdvDetailsReducer = (state = { rdv: {} }, action) => {
         error: action.payload,
       };
     case RDV_DETAILS_RESET:
+      return {};
+
+    default:
+      return state;
+  }
+};
+
+export const userRdvsDetailsReducer = (state = { rdvs: {} }, action) => {
+  switch (action.type) {
+    case RDV_USER_LIST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case RDV_USER_LIST_SUCCESS:
+      return {
+        loading: false,
+        rdvs: action.payload,
+      };
+
+    case RDV_USER_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case RDV_USER_LIST_RESET:
       return {};
 
     default:

@@ -5,7 +5,11 @@ import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 const reviewSchema = mongoose.Schema(
   {
-    name: {
+    nom: {
+      type: String,
+      required: true,
+    },
+    prenom: {
       type: String,
       required: true,
     },

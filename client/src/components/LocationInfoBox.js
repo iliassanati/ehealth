@@ -3,14 +3,19 @@ import React from 'react';
 const LocationInfoBox = ({ doctor }) => {
   return (
     <div className='location-info'>
-      <h2>Location Informations</h2>
+      <h4>Adresse du cabinet</h4>
       <ul>
         <li>
-          Nom
-          <strong>{doctor.Nom}</strong>
+          {doctor.titre}
+          <strong>
+            {doctor.nom} {doctor.prenom}
+          </strong>
         </li>
         <li>
-          Adresse: <strong>{doctor.addressCabinet}</strong>
+          Adresse:{' '}
+          <strong>
+            {doctor.addressCabinet} {doctor.ville}
+          </strong>
         </li>
       </ul>
     </div>

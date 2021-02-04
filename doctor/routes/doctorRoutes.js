@@ -296,7 +296,7 @@ router.post(
   '/:id/reviews',
   auth,
   asyncHandler(async (req, res) => {
-    const { rating, comment } = req.body;
+    const { nom, prenom, rating, comment } = req.body;
 
     const doctor = await Doctor.findById(req.params.id);
 
@@ -311,7 +311,8 @@ router.post(
       }
 
       const review = {
-        name: req.user._id,
+        nom,
+        prenom,
         rating: Number(rating),
         comment,
         user: req.user._id,

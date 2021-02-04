@@ -45,9 +45,9 @@ h4 {
 
 .location-info {
   position: absolute;
-  top: 80px;
-  right: 50px;
-  width: 400px;
+  top: -100px;
+  right: 10px;
+  width: 450px;
   min-height: 200px;
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.6);

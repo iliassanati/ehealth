@@ -20,6 +20,9 @@ import {
   RDV_PAY_FAIL,
   RDV_PAY_REQUEST,
   RDV_PAY_SUCCESS,
+  RDV_USER_LIST_FAIL,
+  RDV_USER_LIST_REQUEST,
+  RDV_USER_LIST_SUCCESS,
 } from '../constants/rdvConstants';
 import axios from 'axios';
 
@@ -109,23 +112,15 @@ export const doctorGetRdvDetails = id => async (dispatch, getState) => {
   }
 };
 
-export const userGetRdvs = id => async (dispatch, getState) => {
+export const userGetRdvs = id => async dispatch => {
   try {
-    dispatch({ type: RDV_DETAILS_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
+    dispatch({ type: RDV_USER_LIST_REQUEST });
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-    const { data } = await axios.get(`/api/rdvs/${id}`, config);
-    dispatch({ type: RDV_DETAILS_SUCCESS, payload: data });
+    const { data } = await axios.get(`/api/rdvs/${id}/doctorinfo`);
+    dispatch({ type: RDV_USER_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
-      type: RDV_DETAILS_FAIL,
+      type: RDV_USER_LIST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

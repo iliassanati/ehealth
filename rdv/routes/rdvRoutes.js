@@ -222,4 +222,20 @@ router.post(
   })
 );
 
+//@desc Get all rdvs for a doctor
+//@route GET /api/rdvs/
+//@access Public
+router.get(
+  '/:id/doctorinfo',
+  asyncHandler(async (req, res) => {
+    const rdvs = await RDV.find({ doctorId: req.params.id });
+
+    if (rdvs) {
+      res.json(rdvs);
+    } else {
+      throw new Error('Server error');
+    }
+  })
+);
+
 export default router;

@@ -24,8 +24,8 @@ const DoctorInfoScreen = ({ match, history }) => {
 
   console.log(doctor);
 
-  const doctorRdvList = useSelector(state => state.doctorRdvList);
-  const { rdvs } = doctorRdvList;
+  // const doctorRdvList = useSelector(state => state.doctorRdvList);
+  // const { rdvs } = doctorRdvList;
 
   const doctorReviewCreate = useSelector(state => state.doctorReviewCreate);
   const {
@@ -36,17 +36,20 @@ const DoctorInfoScreen = ({ match, history }) => {
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
+  const userRdvsDetails = useSelector(state => state.userRdvsDetails);
+  const { rdvs } = userRdvsDetails;
+
   useEffect(() => {
-    if (!doctor.nom || !rdvs) {
+    if (!doctor.nom) {
       dispatch(getDoctorInfo(match.params.id));
       dispatch(userGetRdvs(match.params.id));
-
-      if (successDoctorReview) {
-        alert('Review Submitted!');
-        setRating(0);
-        setComment('');
-        dispatch({ type: DOCTOR_CREATE_REVIEW_RESET });
-      }
+    }
+    if (successDoctorReview) {
+      alert('Review Submitted!');
+      setRating(0);
+      setComment('');
+      dispatch({ type: DOCTOR_CREATE_REVIEW_RESET });
+      dispatch(getDoctorInfo(match.params.id));
     }
   }, [dispatch, match, successDoctorReview, doctor, rdvs]);
 
@@ -83,7 +86,14 @@ const DoctorInfoScreen = ({ match, history }) => {
 
   const submitHandler = e => {
     e.preventDefault();
-    dispatch(createDoctorReview(match.params.id, { rating, comment }));
+    dispatch(
+      createDoctorReview(match.params.id, {
+        nom: userInfo.nom,
+        prenom: userInfo.prenom,
+        rating,
+        comment,
+      })
+    );
   };
 
   return (
@@ -188,7 +198,9 @@ const DoctorInfoScreen = ({ match, history }) => {
               <ListGroup variant='flush'>
                 {doctor.reviews.map(review => (
                   <ListGroup.Item key={review._id}>
-                    <strong>{review.name}</strong>
+                    <strong>
+                      {review.nom} {review.prenom}
+                    </strong>
                     <Rating value={review.rating} />
                     <p>{review.createdAt.substring(0, 10)}</p>
                     <p>{review.comment}</p>

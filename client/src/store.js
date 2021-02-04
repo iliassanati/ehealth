@@ -27,6 +27,7 @@ import {
   rdvDeliverReducer,
   rdvDetailsReducer,
   rdvPayReducer,
+  userRdvsDetailsReducer,
 } from './reducers/rdvReducers';
 import { rdvInfoReducer } from './reducers/rdvInfoReducers';
 
@@ -49,6 +50,7 @@ const reducer = combineReducers({
   rdvPay: rdvPayReducer,
   rdvDeliver: rdvDeliverReducer,
   patientRdvList: patientRdvListReducer,
+  userRdvsDetails: userRdvsDetailsReducer,
   doctorRdvList: doctorRdvListReducer,
   deleteCancelledRdv: deleteCancelledRdvReducer,
 });
