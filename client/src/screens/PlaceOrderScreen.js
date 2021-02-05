@@ -66,7 +66,6 @@ const PlaceOrderScreen = ({ history, match }) => {
       taxPrice: rdvInfo.taxPrice,
       totalPrice: rdvInfo.totalPrice,
     };
-
     dispatch(createRdv(rdv));
   };
   return (

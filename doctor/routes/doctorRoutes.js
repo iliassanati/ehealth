@@ -376,4 +376,21 @@ router.post('/uploads', upload.single('image'), (req, res) => {
   res.send(`/${req.file.path}`);
 });
 
+//@route    GET api/doctors/
+//@desc     Fetch all drs
+//@access   Admin
+router.get(
+  '/',
+ // admin,
+  asyncHandler(async (req, res) => {
+    const drs = await Doctor.find();
+
+    if (drs) {
+      res.json(drs);
+    } else {
+      throw new Error('Not authorized');
+    }
+  })
+);
+
 export default router;

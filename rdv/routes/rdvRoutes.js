@@ -238,4 +238,21 @@ router.get(
   })
 );
 
+//@route    GET api/rdvs/
+//@desc     Fetch all rdvs
+//@access   Admin
+router.get(
+  '/',
+ // admin,
+  asyncHandler(async (req, res) => {
+    const rdvs = await RDV.find();
+
+    if (rdvs) {
+      res.json(rdvs);
+    } else {
+      throw new Error('Not authorized');
+    }
+  })
+);
+
 export default router;

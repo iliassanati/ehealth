@@ -30,6 +30,10 @@ import {
   userRdvsDetailsReducer,
 } from './reducers/rdvReducers';
 import { rdvInfoReducer } from './reducers/rdvInfoReducers';
+import { adminListUsersReducer } from './reducers/adminReducers';
+import { adminListDrsReducer } from './reducers/adminReducers';
+import { adminListRdvsReducer } from './reducers/adminReducers';
+import { adminListPaymentsReducer } from './reducers/adminReducers';
 
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
@@ -53,6 +57,11 @@ const reducer = combineReducers({
   userRdvsDetails: userRdvsDetailsReducer,
   doctorRdvList: doctorRdvListReducer,
   deleteCancelledRdv: deleteCancelledRdvReducer,
+
+  adminListUsers: adminListUsersReducer,
+  adminListDrs: adminListDrsReducer,
+  adminListRdvs: adminListRdvsReducer,
+  adminListPayments: adminListPaymentsReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

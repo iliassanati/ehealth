@@ -9,6 +9,10 @@ import PatientLoginScreen from './screens/patient/PatientLoginScreen';
 import PatientRegisterScreen from './screens/patient/PatientRegisterScreen';
 import PatientProfileScreen from './screens/patient/PatientProfileScreen';
 
+// Admin
+
+import Admin from './admin/pages/Admin'
+
 //Doctor Screen
 import DoctorLoginScreen from './screens/doctor/DoctorLoginScreen';
 import DoctorRegisterScreen from './screens/doctor/DoctorRegisterScreen';
@@ -41,6 +45,8 @@ function App() {
             />
             <Route path='/doctor/:id/placeorder' component={PlaceOrder} exact />
             <Route path='/rdv/:id' component={OrderScreen} />
+
+            <Route path='/admin' component={Admin} />
 
             <Route path='/patient/login' component={PatientLoginScreen} />
             <Route path='/patient/register' component={PatientRegisterScreen} />

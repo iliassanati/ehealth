@@ -265,7 +265,7 @@ router.post(
 //@access   Admin
 router.get(
   '/',
-  admin,
+ // admin,
   asyncHandler(async (req, res) => {
     const users = await User.find();
 

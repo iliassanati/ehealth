@@ -59,4 +59,21 @@ router.post(
   })
 );
 
+//@route    GET api/payments/
+//@desc     Fetch all payments
+//@access   Admin
+router.get(
+  '/',
+ // admin,
+  asyncHandler(async (req, res) => {
+    const payments = await Payment.find();
+
+    if (payments) {
+      res.json(payments);
+    } else {
+      throw new Error('Not authorized');
+    }
+  })
+);
+
 export default router;
