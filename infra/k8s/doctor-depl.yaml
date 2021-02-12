@@ -38,6 +38,7 @@ spec:
                 secretKeyRef:
                   name: jwt-secret-admin
                   key: JWT_KEY_ADMIN
+
 ---
 apiVersion: v1
 kind: Service

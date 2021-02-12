@@ -31,7 +31,10 @@ const DoctorLoginScreen = ({ location, history }) => {
 
   return (
     <FormContainer>
-      <h1>Espace Medecin</h1>
+      <h1>
+        {' '}
+        <i className='fas fa-sign-in-alt'></i> Espace Medecin
+      </h1>
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>

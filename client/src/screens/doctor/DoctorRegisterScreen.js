@@ -58,7 +58,9 @@ const DoctorRegisterScreen = ({ location, history }) => {
 
   return (
     <FormContainer>
-      <h1>Inscription des medecins</h1>
+      <h1>
+        <i className='fas fa-user-plus'></i> Inscription des medecins
+      </h1>
       {message && <Message variant='danger'>{message}</Message>}
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
@@ -149,6 +151,7 @@ const DoctorRegisterScreen = ({ location, history }) => {
               setSpecialite(e.target.value);
             }}
           >
+            <option>Choisissez votre spécialité</option>
             <option>Orthodontiste</option>
             <option>Psychiatre</option>
             <option>Cardiologue</option>
@@ -163,7 +166,7 @@ const DoctorRegisterScreen = ({ location, history }) => {
             <option>Oto-rhino-laryngologue</option>
             <option>Endocrinologue - maladies métaboliques</option>
             <option>Ophtalmologue</option>
-            <option>'Médecin Ostéopathe</option>
+            <option>Médecin Ostéopathe</option>
             <option>Gériatre</option>
             <option>Chirurgien esthétique</option>
             <option>Dermatologue</option>
@@ -263,7 +266,7 @@ const DoctorRegisterScreen = ({ location, history }) => {
           </Form.Group>
 
           <Form.Group as={Col} md='6' controlId='phonePersonel'>
-            <Form.Label>Ville</Form.Label>
+            <Form.Label>Numéro de Téléphone (mobile)</Form.Label>
             <Form.Control
               placeholder='06...'
               value={phonePersonel}
@@ -284,7 +287,9 @@ const DoctorRegisterScreen = ({ location, history }) => {
           <p>Vous avez un compte ?</p>
           <Link
             to={
-              redirect ? `/doctor/login?redirect=${redirect}` : '/doctor/login'
+              redirect
+                ? `/doctors/login?redirect=${redirect}`
+                : '/doctors/login'
             }
           >
             <p>Connecter vous</p>

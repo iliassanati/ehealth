@@ -40,7 +40,9 @@ const PatientRegisterScreen = ({ location, history }) => {
 
   return (
     <FormContainer>
-      <h1>CREATION DU COMPTE</h1>
+      <h1>
+        <i className='fas fa-user-plus'></i> CREATION DU COMPTE
+      </h1>
       {message && <Message variant='danger'>{message}</Message>}
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
@@ -69,16 +71,6 @@ const PatientRegisterScreen = ({ location, history }) => {
         </Form.Row>
 
         <Form.Row>
-          <Form.Group as={Col} md='6' controlId='phone'>
-            <Form.Label>Numero de telephone</Form.Label>
-            <Form.Control
-              type='text'
-              placeholder='Enter votre numero de telephone'
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
           <Form.Group as={Col} md='6' controlId='email'>
             <Form.Label>Adresse Email</Form.Label>
             <Form.Control
@@ -86,6 +78,15 @@ const PatientRegisterScreen = ({ location, history }) => {
               placeholder='Enter votre adresse email'
               value={email}
               onChange={e => setEmail(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+          <Form.Group as={Col} md='6' controlId='phone'>
+            <Form.Label>Numero de telephone</Form.Label>
+            <Form.Control
+              type='text'
+              placeholder='Enter votre numero de telephone'
+              value={phone}
+              onChange={e => setPhone(e.target.value)}
             ></Form.Control>
           </Form.Group>
         </Form.Row>

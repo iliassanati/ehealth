@@ -11,16 +11,23 @@ const DoctorCard = ({ doctor }) => {
           <Link to={`/doctor/${doctor._id}`}>
             <Card.Img src={doctor.image} variant='top' />
             <Card.Body>
-              <Card.Title as='div'>
+              <Card.Title as='div' className='text-center'>
                 <strong>
                   {doctor.titre} {doctor.prenom} {doctor.nom}
                 </strong>
               </Card.Title>
-
-              <Card.Text as='div'>
-                <Rating value={doctor.rating} text={`reviews`} />
+              <Card.Text as='p' className='text-center'>
+                <i className='fas fa-map-pin'></i> {doctor.addressCabinet}{' '}
+                {doctor.ville}
               </Card.Text>
-              <Card.Text as='h6'>{doctor.phoneCabinet}</Card.Text>
+              <Card.Text as='h6' className='text-center'>
+                <i className='fas fa-phone-square-alt'></i>{' '}
+                {doctor.phoneCabinet}
+              </Card.Text>
+
+              <Card.Text as='div' className='text-center'>
+                <Rating value={doctor.rating} text={`Reviews`} />
+              </Card.Text>
             </Card.Body>
           </Link>
         </Card>

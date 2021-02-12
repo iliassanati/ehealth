@@ -27,23 +27,35 @@ const PatientRdvScreen = ({ history }) => {
     <>
       <Row>
         <Col>
-          {/* {userInfo && <h1>Bonjour {userInfo.prenom} </h1>} */}
+          {userInfo && (
+            <h3>
+              <br /> <i className='fas fa-medical'></i> Bonjour{' '}
+              {userInfo.prenom}{' '}
+            </h3>
+          )}
           <Nav className='justify-content-center mb-4'>
             <Nav.Item>
               <LinkContainer to='/patient/profile'>
-                <Nav.Link className='btn btn-light my-3'>Mon profile</Nav.Link>
+                <Nav.Link className='btn btn-light my-3'>
+                  <i className='fas fa-user'></i> Mon profile
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
 
             <Nav.Item>
               <LinkContainer to='/patient/rdvs'>
-                <Nav.Link className='btn btn-light my-3'>Mes rdvs</Nav.Link>
+                <Nav.Link className='btn btn-light my-3'>
+                  {' '}
+                  <i className='fas fa-calendar-alt'> </i> Mes rdvs
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
 
             <Nav.Item>
               <LinkContainer to='/patient/agenda'>
-                <Nav.Link className='btn btn-light my-3'>Mon agenda</Nav.Link>
+                <Nav.Link className='btn btn-light my-3'>
+                  <i className='fas fa-calendar-week'></i> Mon agenda
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
           </Nav>
@@ -51,7 +63,7 @@ const PatientRdvScreen = ({ history }) => {
       </Row>
       <Row>
         <Col md={12}>
-          <h2>Mes rendez-vous</h2>
+          <h4>Mes rendez-vous</h4>
           {loading ? (
             <Loader />
           ) : error ? (

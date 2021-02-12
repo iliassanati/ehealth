@@ -30,7 +30,7 @@ const Header = () => {
         <Container>
           <LinkContainer to='/'>
             <Navbar.Brand>
-              <i className='fal fa-heart-rate'></i> E-Health
+              <i className='fas fa-stethoscope'></i> E-Health
             </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
@@ -38,29 +38,24 @@ const Header = () => {
             <Nav className='ml-auto'>
               {userInfo ? (
                 <>
-                  <LinkContainer to='/patient/profile'>
-                    <Nav.Link>
-                      <i className='fas fa-calendar-alt'> </i> Mes rendez-vous
-                    </Nav.Link>
-                  </LinkContainer>
-                  <NavDropdown title={userInfo.prenom} id='username'>
+                  <>
                     <LinkContainer to='/patient/profile'>
-                      <NavDropdown.Item>
-                        {' '}
-                        <i className='fas fa-user'></i> Profile
-                      </NavDropdown.Item>
+                      <Nav.Link>
+                        <i className='fas fa-user'></i> Espace {userInfo.prenom}
+                      </Nav.Link>
                     </LinkContainer>
-
-                    <NavDropdown.Item onClick={patientLogoutHandler}>
-                      <i className='fas fa-sign-out-alt'></i> Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
+                    <LinkContainer to='/'>
+                      <Nav.Link onClick={patientLogoutHandler}>
+                        <i className='fas fa-sign-out-alt'></i> Deconnecter
+                      </Nav.Link>
+                    </LinkContainer>
+                  </>
                 </>
               ) : doctorInfo ? (
                 <>
                   <LinkContainer to='/doctors/profile'>
                     <Nav.Link>
-                      <i className='fas fa-user-md'></i> Bonjour{' '}
+                      <i className='fas fa-user-md'></i> Espace{' '}
                       {doctorInfo.prenom}
                     </Nav.Link>
                   </LinkContainer>

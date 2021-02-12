@@ -129,27 +129,34 @@ const DoctorProfileScreen = ({ location, history }) => {
     <>
       <Row>
         <Col>
-          {/* {doctorInfo && (
-            <h1>
+          {doctorInfo && (
+            <h3>
+              <br />
               Bonjour {doctorInfo.titre} {doctorInfo.nom}{' '}
-            </h1>
-          )} */}
+            </h3>
+          )}
           <Nav className='justify-content-center mb-4'>
             <Nav.Item>
               <LinkContainer to='/doctors/profile'>
-                <Nav.Link className='btn btn-light my-3'>Mon profile</Nav.Link>
+                <Nav.Link className='btn btn-light my-3'>
+                  {' '}
+                  <i className='fas fa-user'></i> Mon profile
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
 
             <Nav.Item>
               <LinkContainer to='/doctors/patients'>
-                <Nav.Link className='btn btn-light my-3'>Mes patients</Nav.Link>
+                <Nav.Link className='btn btn-light my-3'>
+                  <i className='fas fa-user-injured'></i> Mes patients
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
 
             <Nav.Item>
               <LinkContainer to='/doctors/rdvs'>
                 <Nav.Link className='btn btn-light my-3'>
+                  <i className='fas fa-calendar-alt'> </i>
                   Mes rendez-vous
                 </Nav.Link>
               </LinkContainer>
@@ -174,7 +181,6 @@ const DoctorProfileScreen = ({ location, history }) => {
                   className='image-profile'
                 />
                 <Form.Group controlId='image'>
-                  <Form.Label>Image</Form.Label>
                   <Form.File
                     id='image-file'
                     label='Choose File'
@@ -184,15 +190,13 @@ const DoctorProfileScreen = ({ location, history }) => {
                   {uploading && <Loader />}
                 </Form.Group>
                 <Card.Body>
-                  <Card.Title as='div'>
+                  <Card.Title as='div' className='text-center'>
                     <strong>
-                      {doctor.titre}
-                      {doctor.prenom}
-                      {doctor.nom}
+                      {doctor.titre} {doctor.prenom} {doctor.nom}
                     </strong>
                   </Card.Title>
                   <Card.Text as='div'>
-                    <Rating value={doctor.rating} text={`$ reviews`} />
+                    <Rating value={doctor.rating} text={`$ Reviews`} />
                   </Card.Text>
                   <Card.Text as='h3'>{doctor.phone}</Card.Text>
                 </Card.Body>

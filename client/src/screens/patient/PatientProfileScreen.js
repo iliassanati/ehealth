@@ -60,8 +60,8 @@ const PatientProfileScreen = ({ location, history }) => {
         <Col>
           {userInfo && (
             <h3>
-              {' '}
-              <i className='fas fa-medical'></i> Bonjour {userInfo.prenom}{' '}
+              <br /> <i className='fas fa-medical'></i> Bonjour{' '}
+              {userInfo.prenom}{' '}
             </h3>
           )}
           <Nav className='justify-content-center mb-4'>
@@ -84,7 +84,9 @@ const PatientProfileScreen = ({ location, history }) => {
 
             <Nav.Item>
               <LinkContainer to='/patient/agenda'>
-                <Nav.Link className='btn btn-light my-3'>Mon agenda</Nav.Link>
+                <Nav.Link className='btn btn-light my-3'>
+                  <i className='fas fa-calendar-week'></i> Mon agenda
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
           </Nav>
@@ -97,6 +99,10 @@ const PatientProfileScreen = ({ location, history }) => {
           {success && <Message variant='success'>Profile Updated</Message>}
           {loading && <Loader />}
           <Form onSubmit={submitHandler}>
+            <h5 className='text-center'>
+              Modfier les informations de votre profile
+            </h5>
+            <br />
             <Form.Group controlId='nom'>
               <Form.Label>Nom </Form.Label>
               <Form.Control

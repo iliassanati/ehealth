@@ -27,27 +27,34 @@ const DoctorRdvScreen = ({ history }) => {
     <>
       <Row>
         <Col>
-          {/* {doctorInfo && (
-            <h1>
+          {doctorInfo && (
+            <h3>
+              <br />
               Bonjour {doctorInfo.titre} {doctorInfo.nom}{' '}
-            </h1>
-          )} */}
+            </h3>
+          )}
           <Nav className='justify-content-center mb-4'>
             <Nav.Item>
               <LinkContainer to='/doctors/profile'>
-                <Nav.Link className='btn btn-light my-3'>Mon profile</Nav.Link>
+                <Nav.Link className='btn btn-light my-3'>
+                  {' '}
+                  <i className='fas fa-user'></i> Mon profile
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
 
             <Nav.Item>
               <LinkContainer to='/doctors/patients'>
-                <Nav.Link className='btn btn-light my-3'>Mes patients</Nav.Link>
+                <Nav.Link className='btn btn-light my-3'>
+                  <i className='fas fa-user-injured'></i> Mes patients
+                </Nav.Link>
               </LinkContainer>
             </Nav.Item>
 
             <Nav.Item>
               <LinkContainer to='/doctors/rdvs'>
                 <Nav.Link className='btn btn-light my-3'>
+                  <i className='fas fa-calendar-alt'> </i>
                   Mes rendez-vous
                 </Nav.Link>
               </LinkContainer>
@@ -57,7 +64,7 @@ const DoctorRdvScreen = ({ history }) => {
       </Row>
       <Row>
         <Col md={12}>
-          <h2>Mes rendez-vous</h2>
+          <h3>Mes rendez-vous</h3>
           {loading ? (
             <Loader />
           ) : error ? (

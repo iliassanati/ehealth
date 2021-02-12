@@ -12,9 +12,28 @@ spec:
       labels:
         app: rdv-mongo
     spec:
+      volumes:
+        - name: mongo-rdv-storage
+          persistentVolumeClaim:
+            claimName: rdv-persistent-volume-claim
       containers:
         - name: rdv-mongo
           image: mongo
+          volumeMounts:
+            - name: mongo-rdv-storage
+              mountPath: /data/db
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rdv-persistent-volume-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
 ---
 apiVersion: v1
 kind: Service
