@@ -1,0 +1,58 @@
+name: Build & Test
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v1
+
+      # Cancel previous not completed builds to save bandwith.
+      - name: Cancel Workflow Action
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Pull the latest image to build, and avoid caching pull-only images.
+      # (docker pull is faster than caching in most cases.)
+      - run: docker-compose pull
+
+      # Inspect the images before loading cache
+      - name: Inspect Docker Images before CacheLoad
+        run: docker images -a
+
+      # In this step, this action saves a list of existing images,
+      # the cache is created without them in the post run.
+      # It also restores the cache if it exists.
+      - uses: satackey/action-docker-layer-caching@v0.0.8
+        # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
+
+      # Inspect the images before loading cache
+      - name: Inspect Docker Images after CacheLoad
+        run: docker images -a
+
+      - name: Build
+        run: docker-compose build
+
+      - name: Purge untagged images
+        run: docker images --filter=dangling=true -q --no-trunc | xargs --no-run-if-empty docker rmi -f
+
+      - name: Run Unit Tests Suite
+        run: make test
+
+      - name: Run Depdency Services for Integration Testing
+        run: make up
+        # running linter between make up and running integration creates enough time for
+        # localstack services to be up and running. Yet, this is not a reliable approach
+        # we should rather use `wait-for` approach until the container is up and healthy
+      - name: Test Code Linter
+        run: make lint
+
+      - name: Run Unit Integration Testing
+        run: make integration_test
